@@ -1,0 +1,5 @@
+Tehnoloski stek za cvecaru
+Baza podataka: sqlite, postgresql za dalji razvoj 
+Backend: Python + Django
+Frontend: React
+IDE: PyCharm
