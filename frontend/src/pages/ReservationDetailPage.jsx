@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { api } from '../api'
+import { useNotifications } from '../context/NotificationContext'
 import StatusBadge from '../components/StatusBadge'
 
 export default function ReservationDetailPage() {
   const { id } = useParams()
   const [res, setRes] = useState(null)
+  const { markReadByReservation } = useNotifications()
 
   useEffect(() => {
     api.getReservation(id).then(setRes)
+    markReadByReservation(parseInt(id))
   }, [id])
 
   if (!res) return <div className="page"><p className="muted">Ucitavanje...</p></div>
@@ -29,7 +32,11 @@ export default function ReservationDetailPage() {
             <tbody>
               {res.items.map(item => (
                 <tr key={item.id}>
-                  <td>{item.name}</td>
+                  <td>
+                    <Link to={`/${item.item_type === 'bouquet' ? 'bouquets' : 'flowers'}/${item.item_id}`}>
+                      {item.name}
+                    </Link>
+                  </td>
                   <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                   <td style={{ textAlign: 'right', fontWeight: 600 }}>{item.subtotal} RSD</td>
                 </tr>

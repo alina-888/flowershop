@@ -36,10 +36,12 @@ INSTALLED_APPS = [
     "catalog",
     "reservations",
     "users",
+    "cart",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "config.middleware.MediaCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",

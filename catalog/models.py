@@ -1,4 +1,15 @@
 from django.db import models
+from PIL import Image as PilImage
+
+
+MAX_IMAGE_PX = 1200  # max width or height in pixels
+
+
+def resize_image(path):
+    img = PilImage.open(path)
+    if img.width > MAX_IMAGE_PX or img.height > MAX_IMAGE_PX:
+        img.thumbnail((MAX_IMAGE_PX, MAX_IMAGE_PX), PilImage.LANCZOS)
+        img.save(path, optimize=True, quality=85)
 
 
 class Flower(models.Model):
@@ -11,6 +22,11 @@ class Flower(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            resize_image(self.image.path)
+
 
 class Bouquet(models.Model):
     title = models.CharField(max_length=250)
@@ -21,6 +37,11 @@ class Bouquet(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            resize_image(self.image.path)
 
 
 class BouquetItem(models.Model):

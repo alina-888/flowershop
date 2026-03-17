@@ -4,12 +4,10 @@ import { api } from '../api'
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user')
-    if (saved) setUser(JSON.parse(saved))
-  }, [])
+    return saved ? JSON.parse(saved) : null
+  })
 
   function login(userData) {
     setUser(userData)

@@ -6,16 +6,24 @@ from catalog.models import Bouquet, Flower
 class ReservationItemSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     subtotal = serializers.SerializerMethodField()
+    item_type = serializers.SerializerMethodField()
+    item_id = serializers.SerializerMethodField()
 
     class Meta:
         model = ReservationItem
-        fields = ['id', 'name', 'quantity', 'price', 'subtotal']
+        fields = ['id', 'name', 'item_type', 'item_id', 'quantity', 'price', 'subtotal']
 
     def get_name(self, obj):
         return obj.name()
 
     def get_subtotal(self, obj):
         return obj.subtotal()
+
+    def get_item_type(self, obj):
+        return 'bouquet' if obj.bouquet_id else 'flower'
+
+    def get_item_id(self, obj):
+        return obj.bouquet_id if obj.bouquet_id else obj.flower_id
 
 
 class ReservationSerializer(serializers.ModelSerializer):
